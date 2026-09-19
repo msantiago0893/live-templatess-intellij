@@ -1,0 +1,29 @@
+<templateSet group="Interview - Exception">
+  <template name="ex-notfound" value="@ResponseStatus(HttpStatus.NOT_FOUND)&#10;public class ResourceNotFoundException extends RuntimeException {&#10;&#10;    public ResourceNotFoundException(String message) {&#10;        super(message);&#10;    }&#10;}" description="Excepción de recurso no existe" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="ex-globalhandler" value="@RestControllerAdvice&#10;public class $NAME$ {&#10;&#10;    @ExceptionHandler(ResourceNotFoundException.class)&#10;    public ResponseEntity&lt;Map&lt;String, String&gt;&gt; handleNotFound(&#10;            ResourceNotFoundException ex) {&#10;&#10;        return ResponseEntity&#10;                .status(HttpStatus.NOT_FOUND)&#10;                .body(Map.of(&quot;error&quot;, ex.getMessage()));&#10;    }&#10;&#10;    @ExceptionHandler(MethodArgumentNotValidException.class)&#10;    public ResponseEntity&lt;Map&lt;String, String&gt;&gt; handleValidation(&#10;            MethodArgumentNotValidException ex) {&#10;&#10;        Map&lt;String, String&gt; errors = ex.getBindingResult()&#10;                .getFieldErrors()&#10;                .stream()&#10;                .collect(Collectors.toMap(&#10;                        FieldError::getField,&#10;                        error -&gt; error.getDefaultMessage() != null&#10;                                ? error.getDefaultMessage()&#10;                                : &quot;Invalid value&quot;,&#10;                        (first, second) -&gt; first&#10;                ));&#10;&#10;        return ResponseEntity&#10;                .badRequest()&#10;                .body(errors);&#10;    }&#10;}" description="Genera GlobalExceptionHandler" toReformat="false" toShortenFQNames="true">
+    <variable name="NAME" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="ex-personalizable" value="public class $NAME$ extends RuntimeException {&#10;&#10;    public $NAME$(String message) {&#10;        super(message);&#10;    }&#10;&#10;    public $NAME$(String message, Throwable cause) {&#10;        super(message, cause);&#10;    }&#10;}" description="Crea excepción personalizada" toReformat="false" toShortenFQNames="true">
+    <variable name="NAME" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="ex-businessrule" value="public class ResourceNotFoundException extends RuntimeException {&#10;&#10;    public ResourceNotFoundException(String message) {&#10;        super(message);&#10;    }&#10;}" description="Excepcion que no cumple con regla de negocio" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="ex-conflict" value="public class ConflictException extends RuntimeException {&#10;&#10;  public ConflictException(String message) {&#10;    super(message);&#10;  }&#10;}" description="Excepcion cuando hay conflicto con el estado actual del recurso" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>

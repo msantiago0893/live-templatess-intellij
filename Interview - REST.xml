@@ -1,0 +1,65 @@
+<templateSet group="Interview - REST">
+  <template name="get-all" value="@GetMapping&#10;public ResponseEntity&lt;List&lt;$TYPE$DtoResponse&gt;&gt; findAll() {&#10;    return ResponseEntity.ok(service.findAll());&#10;}" description="GET controller - Obtener todos" toReformat="false" toShortenFQNames="true">
+    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="get-byid" value="@GetMapping(&quot;/{id}&quot;)&#10;public ResponseEntity&lt;$TYPE$DtoResponse&gt; findById(@PathVariable Long id) {&#10;  return ResponseEntity.ok(service.findById(id));&#10;}" description="GET Controller - Obtener recurso por ID" toReformat="false" toShortenFQNames="true">
+    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="post" value="@PostMapping&#10;public ResponseEntity&lt;DtoResponse&gt; create(&#10;        @Valid @RequestBody DtoRequest request) {&#10;&#10;    return ResponseEntity.status(HttpStatus.CREATED)&#10;            .body(service.save(request));&#10;}" description="POST Controller" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="put" value="@PutMapping(&quot;/{id}&quot;)&#10;public ResponseEntity&lt;$Type1$DtoResponse&gt; update(&#10;        @PathVariable Long id,&#10;        @Valid @RequestBody $Type2$DtoRequest request) {&#10;&#10;    return ResponseEntity.ok(service.update(id, request));&#10;}" description="PUT Controller" toReformat="false" toShortenFQNames="true">
+    <variable name="Type1" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="Type2" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="delete" value="@DeleteMapping(&quot;/{id}&quot;)&#10;public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {&#10;    service.delete(id);&#10;    return ResponseEntity.noContent().build();&#10;}" description="DELETE Controller" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="get-path" value="@GetMapping(&quot;/{id}/$PATH$&quot;)&#10;public ResponseEntity&lt;List&lt;DtoResponse&gt;&gt; retrieveById(&#10;        @PathVariable Long id) {&#10;&#10;    return ResponseEntity.ok(service.findByPath(id));&#10;}" description="GET Controller - Con PathVariable adicional" toReformat="false" toShortenFQNames="true">
+    <variable name="PATH" expression="" defaultValue="&quot;Ejemplo&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="get-querys" value="@GetMapping&#10;public ResponseEntity&lt;List&lt;DtoResponse&gt;&gt; find(&#10;        @RequestParam(required = false) String param1) {&#10;&#10;    return ResponseEntity.ok(&#10;            service.find(param1)&#10;    );&#10;}" description="GET Controller - Con Query Params" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="post-path" value="@PostMapping(&quot;/{id}/$PATH$&quot;)&#10;public ResponseEntity&lt;$Type1$DtoResponse&gt; create(&#10;  @PathVariable Long id,&#10;  @Valid @RequestBody $Type2$DtoRequest request) {&#10;&#10;  return ResponseEntity&#10;    .status(HttpStatus.CREATED)&#10;    .body(service.create(id, request));&#10;}" description="POST Controller - Con PathVariable adicional" toReformat="false" toShortenFQNames="true">
+    <variable name="PATH" expression="" defaultValue="&quot;ejemplo&quot;" alwaysStopAt="true" />
+    <variable name="Type1" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="Type2" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="patch" value="@PatchMapping(&quot;/{id}&quot;)&#10;public ResponseEntity&lt;DtoResponse&gt; updatePartial(&#10;        @PathVariable Long id,&#10;        @Valid @RequestBody DtoRequest request) {&#10;&#10;    return ResponseEntity.ok(&#10;            service.updatePartial(id, request)&#10;    );&#10;}" description="PATCH - Actualizar parcialmente un recurso" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="delete-query" value="@DeleteMapping&#10;public ResponseEntity&lt;Void&gt; delete(&#10;        @RequestParam Long paramquery1) {&#10;&#10;    service.delete(paramquery1);&#10;&#10;    return ResponseEntity.noContent().build();&#10;}" description="DELETE Controller — Con Query Param" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="get-filter" value="@GetMapping(&quot;/search&quot;)&#10;public ResponseEntity&lt;List&lt;DtoResponse&gt;&gt; search(&#10;        @RequestParam(required = false) String name,&#10;        @RequestParam(required = false) String email,&#10;        @RequestParam(required = false) String status) {&#10;&#10;    return ResponseEntity.ok(&#10;            service.search(name, email, status)&#10;    );&#10;}" description="GET Controller - Búsqueda avanzada" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>

@@ -1,0 +1,43 @@
+<templateSet group="Interview - Logs">
+  <template name="loginfo" value="log.info(&quot;$MESSAGE$&quot;);" description="log info - mensaje general" toReformat="false" toShortenFQNames="true">
+    <variable name="MESSAGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="loginfoid" value="// Ejemplo: log.info(&quot;Cliente creado, id={}&quot;, saved.getId());&#10;log.info(&quot;$MESSAGE$, id={}&quot;, $ID$);" description="log info - mensaje con id" toReformat="false" toShortenFQNames="true">
+    <variable name="MESSAGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="ID" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="logwarn" value="//Ejemplo: log.warn(&quot;Cliente no encontrado, id={}&quot;, id);&#10;log.warn(&quot;$MESSAGE$, id={}&quot;, $ID$);&#10;&#10;&#10;" description="log warn - mensaje con id" toReformat="false" toShortenFQNames="true">
+    <variable name="MESSAGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="ID" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="logerror" value="log.error(&quot;$MESSAGE$&quot;, $EXCEPTION$);" description="log error - mensaje general" toReformat="false" toShortenFQNames="true">
+    <variable name="MESSAGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="EXCEPTION" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="logerrorid" value="log.error(&quot;$MESSAGE$, id={}&quot;, $ID$, $EXCEPTION$);" description="log error - mensaje con id" toReformat="false" toShortenFQNames="true">
+    <variable name="MESSAGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="ID" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="EXCEPTION" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="logger" value="private static final Logger log = LoggerFactory.getLogger($CLASS$.class);" description="Crear - Variable logger" toReformat="false" toShortenFQNames="true">
+    <variable name="CLASS" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>
