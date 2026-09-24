@@ -1,0 +1,18 @@
+<templateSet group="Interview - Utils">
+  <template name="util-ruleBussines" value="if ($Rule_bussiness$) {&#10;    throw new BusinessException(&quot;Email ya existe&quot;);&#10;}" description="Crea regla de negocio" toReformat="false" toShortenFQNames="true">
+    <variable name="Rule_bussiness" expression="" defaultValue="&quot;Mi_regla_de_negocio&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="opt-findById" value="Entity myEntity = myRepository.findById(id)&#10;    .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found&quot;));" description="Obtiene elemento encontrado. Lanza excepción si es null" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="opt-nullable" value="Optional.ofNullable(customer)&#10;  .map(Customer::getEmail)&#10;  .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Item not found&quot;));" description="Obtiene el elemento y lanza excepción si es null" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>

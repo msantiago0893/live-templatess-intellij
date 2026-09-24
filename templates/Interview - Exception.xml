@@ -1,0 +1,52 @@
+<templateSet group="Interview - Exception">
+  <template name="ex-resourcenotfound" value="@ResponseStatus(HttpStatus.NOT_FOUND)&#10;public class ResourceNotFoundException extends RuntimeException {&#10;&#10;    public ResourceNotFoundException(String message) {&#10;        super(message);&#10;    }&#10;}" description="Excepción de recurso no existe" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="globalEx-resourceNotFound" value="@ExceptionHandler(ResourceNotFoundException.class)&#10;public ResponseEntity&lt;ErrorResponse&gt; handleResourceNotFound(&#10;  ResourceNotFoundException ex) {&#10;  // El recurso solicitado no existe.&#10;  return ResponseEntity&#10;    .status(HttpStatus.NOT_FOUND)&#10;    .body(new ErrorResponse(ex.getMessage()));&#10;}" description="Maneja error de elemento no encontrado" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="ex-business" value="public class ResourceNotFoundException extends RuntimeException {&#10;&#10;    public ResourceNotFoundException(String message) {&#10;        super(message);&#10;    }&#10;}" description="Excepcion que no cumple con regla de negocio" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="ex-conflict" value="public class ConflictException extends RuntimeException {&#10;&#10;  public ConflictException(String message) {&#10;    super(message);&#10;  }&#10;}" description="Excepcion cuando hay conflicto con el estado actual del recurso" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="globalEX-validation" value="@ExceptionHandler(MethodArgumentNotValidException.class)&#10;public ResponseEntity&lt;ErrorResponse&gt; handleValidation(&#10;        MethodArgumentNotValidException ex) {&#10;    String message = ex.getBindingResult()&#10;            .getFieldErrors()&#10;            .stream()&#10;            .findFirst()&#10;            .map(FieldError::getDefaultMessage)&#10;            .orElse(&quot;El objeto json es inválido.&quot;);&#10;&#10;    return ResponseEntity.badRequest()&#10;            .body(new ErrorResponse(message));&#10;}" description="Maneja errores de validación en @Valid @RequestBody" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="globalEx-constraint" value="@ExceptionHandler(ConstraintViolationException.class)&#10;public ResponseEntity&lt;ErrorResponse&gt; handleConstraintViolation(&#10;        ConstraintViolationException ex) {&#10;    // Maneja validaciones de @RequestParam y @PathVariable&#10;    String message = ex.getConstraintViolations()&#10;            .stream()&#10;            .findFirst()&#10;            .map(ConstraintViolation::getMessage)&#10;            .orElse(&quot;Solicitud invválido, el valor de los parametros no cumplen&quot;);&#10;&#10;    return ResponseEntity.badRequest()&#10;            .body(new ErrorResponse(message));&#10;}" description="Maneja validaciones de parámetros (@RequestParam, @PathVariable)" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="globalEx-readable" value="@ExceptionHandler(HttpMessageNotReadableException.class)&#10;public ResponseEntity&lt;ErrorResponse&gt; handleUnreadableMessage(&#10;        HttpMessageNotReadableException ex) {&#10;     return ResponseEntity.badRequest()&#10;            .body(new ErrorResponse(&quot;El objeto json es inválido. Intente de nuevo&quot;));&#10;}" description="Maneja JSON mal formado (deserialización de JSON), enum inexistente." toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="globalEx-businness" value="@ExceptionHandler(BusinessException.class)&#10;public ResponseEntity&lt;ErrorResponse&gt; handleBusinessException(&#10;        BusinessException ex) {&#10;    return ResponseEntity.badRequest()&#10;            .body(new ErrorResponse(ex.getMessage()));&#10;}" description="Manera errores de reglas de engocio" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="globalEx-conflict" value="@ExceptionHandler(ConflictException.class)&#10;public ResponseEntity&lt;ErrorResponse&gt; handleConflictException(&#10;        ConflictException ex) {&#10;    return ResponseEntity.status(HttpStatus.CONFLICT)&#10;            .body(new ErrorResponse(ex.getMessage()));&#10;}" description="Maneja conflictos con el estado actual del recurso" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="global-internalServer" value="@ExceptionHandler(Exception.class)&#10;public ResponseEntity&lt;ErrorResponse&gt; handleInternalServerException(&#10;        Exception ex) {&#10;    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)&#10;            .body(new ErrorResponse(&quot;Internal server error&quot;));&#10;}" description="Maneja errores inesperados del servidor" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>

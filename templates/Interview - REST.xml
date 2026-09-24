@@ -1,5 +1,5 @@
 <templateSet group="Interview - REST">
-  <template name="get-all" value="@GetMapping&#10;public ResponseEntity&lt;List&lt;$TYPE$DtoResponse&gt;&gt; findAll() {&#10;    return ResponseEntity.ok(service.findAll());&#10;}" description="GET controller - Obtener todos" toReformat="false" toShortenFQNames="true">
+  <template name="get-all" value="@GetMapping&#10;public ResponseEntity&lt;List&lt;$TYPE$DtoResponse&gt;&gt; findAll() {&#10;    return ResponseEntity.ok(service.findAll());&#10;}" description="GET controller - Obtener todos los registros" toReformat="false" toShortenFQNames="true">
     <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="JAVA_CODE" value="true" />

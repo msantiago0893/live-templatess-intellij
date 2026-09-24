@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ejercicios Spring Boot - Programa de lealtad</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Calibri, Arial, sans-serif; font-size: 12pt; line-height: 1.5; color: #222; background: #f5f5f5; }
+  .container { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar { width: 320px; background: #1e2a3a; color: #fff; padding: 20px; overflow-y: auto; flex-shrink: 0; }
+  .sidebar h1 { font-size: 16pt; margin-bottom: 16px; border-bottom: 2px solid #3a9d5d; padding-bottom: 8px; }
+  .sidebar h1 small { display: block; font-size: 9pt; font-weight: normal; color: #aaa; margin-top: 4px; }
+  .nav-group { margin-bottom: 14px; }
+  .nav-group-title { font-size: 10pt; text-transform: uppercase; letter-spacing: 1px; color: #7fbf9a; margin-bottom: 6px; }
+  .nav-item { display: block; padding: 7px 10px; margin-bottom: 4px; background: #2a3a4e; border-radius: 6px; cursor: pointer; color: #ddd; text-decoration: none; font-size: 11pt; transition: background 0.15s; }
+  .nav-item:hover { background: #3a9d5d; color: #fff; }
+  .nav-item.active { background: #3a9d5d; color: #fff; font-weight: bold; }
+  .nav-item .num { display: inline-block; width: 26px; height: 26px; line-height: 26px; text-align: center; background: #1e2a3a; border-radius: 50%; font-size: 10pt; margin-right: 8px; }
+  .nav-item.active .num { background: #fff; color: #3a9d5d; }
+
+  /* Main */
+  .main { flex: 1; padding: 30px 40px; overflow-y: auto; }
+  .exercise { display: none; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .exercise.active { display: block; }
+  .exercise h1 { font-size: 20pt; color: #1e2a3a; margin-bottom: 16px; border-bottom: 3px solid #3a9d5d; padding-bottom: 8px; }
+  .exercise h2 { font-size: 15pt; color: #1e2a3a; margin-top: 26px; margin-bottom: 10px; }
+  .exercise p { margin-bottom: 10px; }
+  .exercise ol, .exercise ul { margin-left: 24px; margin-bottom: 12px; }
+  .exercise li { margin-bottom: 4px; }
+  table { border-collapse: collapse; width: 70%; margin: 10px 0 16px; }
+  th, td { border: 1px solid #000; padding: 6px 12px; text-align: left; }
+  th { background-color: #d9d9d9; font-weight: bold; }
+  code { font-family: Consolas, monospace; background: #f0f0f0; padding: 1px 4px; border-radius: 3px; }
+  pre { font-family: Consolas, monospace; background: #f4f4f4; border: 1px solid #ddd; border-radius: 6px; padding: 12px; margin: 8px 0 16px; overflow-x: auto; font-size: 11pt; }
+  .badge { display: inline-block; background: #3a9d5d; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 9pt; margin-left: 8px; vertical-align: middle; }
+  .badge.basico { background: #3a9d5d; }
+  .badge.intermedio { background: #e6a23c; }
+  .badge.avanzado { background: #d9534f; }
+  .badge.entrevista { background: #6f42c1; }
+  .note-entrevista { background: #f3e8ff; border-left: 4px solid #6f42c1; padding: 10px 14px; margin: 12px 0; border-radius: 0 6px 6px 0; font-weight: bold; color: #6f42c1; }
+  .inicio { text-align: center; padding: 60px 20px; }
+  .inicio h1 { border: none; }
+  .inicio .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px; text-align: left; }
+  .card { background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 14px; cursor: pointer; transition: all 0.15s; }
+  .card:hover { border-color: #3a9d5d; box-shadow: 0 3px 10px rgba(58,157,93,0.25); transform: translateY(-2px); }
+  .card h3 { font-size: 12pt; color: #1e2a3a; margin-bottom: 6px; }
+  .card p { font-size: 10pt; color: #666; }
+  .card .badge { margin-left: 0; margin-top: 6px; }
+  @media print {
+    .sidebar { display: none; }
+    .exercise { display: block !important; page-break-after: always; box-shadow: none; }
+    .main { padding: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <h1>Ejercicios Spring Boot<small>Selecciona uno para practicar</small></h1>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Ejercicios en entrevista técnica</div>
+      <a class="nav-item" data-target="ejentrevista" onclick="show('ejentrevista',this)"><span class="num">★</span> Programa de lealtad (Banamex)</a>
+      <a class="nav-item" data-target="ejentrevista2" onclick="show('ejentrevista2',this)"><span class="num">★</span> Gestión de cuentas (Account)</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Inicio</div>
+      <a class="nav-item active" data-target="inicio" onclick="show('inicio',this)"><span class="num">⌂</span> Todos los ejercicios</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Nivel básico</div>
+      <a class="nav-item" data-target="ej1" onclick="show('ej1',this)"><span class="num">1</span> Libros de biblioteca</a>
+      <a class="nav-item" data-target="ej2" onclick="show('ej2',this)"><span class="num">2</span> Productos de tienda</a>
+      <a class="nav-item" data-target="ej3" onclick="show('ej3',this)"><span class="num">3</span> Registro de usuarios</a>
+      <a class="nav-item" data-target="ej4" onclick="show('ej4',this)"><span class="num">4</span> Tareas (To-Do)</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Nivel intermedio</div>
+      <a class="nav-item" data-target="ej5" onclick="show('ej5',this)"><span class="num">5</span> Cuentas bancarias</a>
+      <a class="nav-item" data-target="ej6" onclick="show('ej6',this)"><span class="num">6</span> Inventario de almacén</a>
+      <a class="nav-item" data-target="ej7" onclick="show('ej7',this)"><span class="num">7</span> Reservas de hotel</a>
+      <a class="nav-item" data-target="ej8" onclick="show('ej8',this)"><span class="num">8</span> Carrito de compras</a>
+      <a class="nav-item" data-target="ej9" onclick="show('ej9',this)"><span class="num">9</span> Estacionamiento</a>
+      <a class="nav-item" data-target="ej10" onclick="show('ej10',this)"><span class="num">10</span> Notas médicas</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Nivel avanzado</div>
+      <a class="nav-item" data-target="ej11" onclick="show('ej11',this)"><span class="num">11</span> Transferencias bancarias</a>
+      <a class="nav-item" data-target="ej12" onclick="show('ej12',this)"><span class="num">12</span> Cupones de descuento</a>
+      <a class="nav-item" data-target="ej13" onclick="show('ej13',this)"><span class="num">13</span> Biblioteca con préstamos</a>
+      <a class="nav-item" data-target="ej14" onclick="show('ej14',this)"><span class="num">14</span> Eventos con aforo</a>
+      <a class="nav-item" data-target="ej15" onclick="show('ej15',this)"><span class="num">15</span> Wallet digital</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- INICIO -->
+    <section id="inicio" class="exercise active">
+      <div class="inicio">
+        <h1>Ejercicios de práctica</h1>
+        <p>Spring Boot + JPA + H2 — Selecciona un ejercicio del menú lateral o de las tarjetas.</p>
+        <div class="grid">
+          <div class="card" style="border-color:#6f42c1" onclick="show('ejentrevista')"><h3>★ Programa de lealtad</h3><p>Microservicio de clientes y puntos canjeables.</p><span class="badge entrevista">Entrevista técnica</span></div>
+          <div class="card" style="border-color:#6f42c1" onclick="show('ejentrevista2')"><h3>★ Gestión de cuentas</h3><p>CRUD de cuentas bancarias con bloqueo.</p><span class="badge entrevista">Entrevista técnica</span></div>
+          <div class="card" onclick="show('ej1')"><h3>1. Libros de biblioteca</h3><p>CRUD de libros con disponibilidad de préstamo.</p><span class="badge basico">Básico</span></div>
+          <div class="card" onclick="show('ej2')"><h3>2. Productos de tienda</h3><p>CRUD de productos con precio y stock.</p><span class="badge basico">Básico</span></div>
+          <div class="card" onclick="show('ej3')"><h3>3. Registro de usuarios</h3><p>CRUD de usuarios con email único.</p><span class="badge basico">Básico</span></div>
+          <div class="card" onclick="show('ej4')"><h3>4. Tareas (To-Do)</h3><p>Gestión de tareas con estado y prioridad.</p><span class="badge basico">Básico</span></div>
+          <div class="card" onclick="show('ej5')"><h3>5. Cuentas bancarias</h3><p>Depósitos y retiros con control de saldo.</p><span class="badge intermedio">Intermedio</span></div>
+          <div class="card" onclick="show('ej6')"><h3>6. Inventario de almacén</h3><p>Entradas y salidas con control de stock.</p><span class="badge intermedio">Intermedio</span></div>
+          <div class="card" onclick="show('ej7')"><h3>7. Reservas de hotel</h3><p>Habitaciones con disponibilidad por fechas.</p><span class="badge intermedio">Intermedio</span></div>
+          <div class="card" onclick="show('ej8')"><h3>8. Carrito de compras</h3><p>Agregar/eliminar productos y calcular total.</p><span class="badge intermedio">Intermedio</span></div>
+          <div class="card" onclick="show('ej9')"><h3>9. Estacionamiento</h3><p>Ingreso/salida de vehículos con tarifa.</p><span class="badge intermedio">Intermedio</span></div>
+          <div class="card" onclick="show('ej10')"><h3>10. Notas médicas</h3><p>Pacientes con notas médicas (1-N).</p><span class="badge intermedio">Intermedio</span></div>
+          <div class="card" onclick="show('ej11')"><h3>11. Transferencias</h3><p>Transferir entre cuentas con atomicidad.</p><span class="badge avanzado">Avanzado</span></div>
+          <div class="card" onclick="show('ej12')"><h3>12. Cupones de descuento</h3><p>Cupones únicos aplicables una sola vez.</p><span class="badge avanzado">Avanzado</span></div>
+          <div class="card" onclick="show('ej13')"><h3>13. Biblioteca con préstamos</h3><p>Libros con ejemplares y usuarios (N-N).</p><span class="badge avanzado">Avanzado</span></div>
+          <div class="card" onclick="show('ej14')"><h3>14. Eventos con aforo</h3><p>Inscripciones con cupo limitado.</p><span class="badge avanzado">Avanzado</span></div>
+          <div class="card" onclick="show('ej15')"><h3>15. Wallet digital</h3><p>Recargar, pagar e historial de transacciones.</p><span class="badge avanzado">Avanzado</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EJERCICIO ENTREVISTA - PROGRAMA DE LEALTAD -->
+    <section id="ejentrevista" class="exercise">
+      <h1>Programa de lealtad — Clientes y puntos <span class="badge entrevista">Entrevista técnica</span></h1>
+
+      <div class="note-entrevista">Nota: Ejercicio de entrevista técnica Indra — para Banamex — mid sr</div>
+
+      <h2>Caso de negocio</h2>
+      <p>Una empresa cuenta con un programa de lealtad para sus clientes. Los clientes acumulan puntos por sus compras y posteriormente pueden canjearlos por beneficios. Se requiere desarrollar un microservicio para administrar clientes y sus puntos.</p>
+
+      <h2>Entidad principal: Customer</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>customerNumber</td><td>Número de cliente</td></tr>
+        <tr><td>name</td><td>Nombre del cliente</td></tr>
+        <tr><td>points</td><td>Puntos acumulados</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear cliente</h2>
+      <pre>{
+  "customerNumber": "0001",
+  "name": "Juan Perez"
+}</pre>
+
+      <h2>Ejemplo - Acumular puntos</h2>
+      <pre>{
+  "points": 100
+}</pre>
+
+      <h2>Ejemplo - Canjear puntos</h2>
+      <pre>{
+  "points": 50
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>customerNumber es obligatorio.</li>
+        <li>customerNumber debe ser único.</li>
+        <li>name es obligatorio.</li>
+        <li>Los puntos iniciales deben comenzar en cero.</li>
+        <li>Los puntos a acumular deben ser mayores a cero.</li>
+        <li>Los puntos a canjear deben ser mayores a cero.</li>
+        <li>No se debe permitir que el saldo de puntos sea negativo.</li>
+        <li>El cliente debe existir para poder acumular o canjear puntos.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el cliente no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando no existan suficientes puntos para realizar el canje.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/customers</td><td>Crear cliente</td></tr>
+        <tr><td>GET</td><td>/customers</td><td>Consultar clientes</td></tr>
+        <tr><td>GET</td><td>/customers/{id}</td><td>Consultar cliente por id</td></tr>
+        <tr><td>POST</td><td>/customers/{id}/earn-points</td><td>Acumular puntos</td></tr>
+        <tr><td>POST</td><td>/customers/{id}/redeem-points</td><td>Canjear puntos</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta para puntos insuficientes</h2>
+      <pre>{
+  "message": "Insufficient points"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO ENTREVISTA 2 - GESTIÓN DE CUENTAS -->
+    <section id="ejentrevista2" class="exercise">
+      <h1>Gestión de cuentas — Account <span class="badge entrevista">Entrevista técnica</span></h1>
+
+      <div class="note-entrevista">Nota: Ejercicio de entrevista técnica Indra — mid sr</div>
+
+      <h2>Caso de negocio</h2>
+      <p>Una entidad financiera necesita administrar las cuentas de sus clientes: crearlas, consultarlas y bloquearlas cuando sea necesario. Se requiere desarrollar un microservicio para gestionar cuentas.</p>
+
+      <h2>Entidad principal: Account</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>accountNumber</td><td>Número de cuenta</td></tr>
+        <tr><td>customerName</td><td>Nombre del cliente</td></tr>
+        <tr><td>balance</td><td>Saldo de la cuenta</td></tr>
+        <tr><td>status</td><td>Estado (ACTIVE / BLOCKED)</td></tr>
+      </table>
+
+      <h2>Requerimientos técnicos</h2>
+      <ul>
+        <li>Crear una arquitectura por capas.</li>
+        <li>Separar correctamente controller, service y repository.</li>
+        <li>Persistir información utilizando H2.</li>
+        <li>Exponer endpoints REST funcionales.</li>
+        <li>Implementar validaciones básicas.</li>
+        <li>Implementar manejo básico de errores.</li>
+      </ul>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo de request para crear cuenta</h2>
+      <pre>{
+  "accountNumber": "123456",
+  "customerName": "Juan Perez",
+  "balance": 1500
+}</pre>
+
+      <h2>Validaciones requeridas</h2>
+      <ul>
+        <li>accountNumber es obligatorio.</li>
+        <li>customerName es obligatorio.</li>
+        <li>balance debe ser mayor o igual a 0.</li>
+      </ul>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/accounts</td><td>Crear una nueva cuenta</td></tr>
+        <tr><td>GET</td><td>/accounts</td><td>Consultar todas las cuentas</td></tr>
+        <tr><td>GET</td><td>/accounts/{id}</td><td>Consultar una cuenta por id</td></tr>
+        <tr><td>PUT</td><td>/accounts/{id}/block</td><td>Bloquear una cuenta</td></tr>
+      </table>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando la cuenta no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando la cuenta ya esté bloqueada.</li>
+      </ol>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 1 -->
+    <section id="ej1" class="exercise">
+      <h1>Ejercicio 1 — Gestión de libros de biblioteca <span class="badge basico">Básico</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una biblioteca necesita administrar su catálogo de libros. Se requiere desarrollar un microservicio para gestionar los libros y su disponibilidad para préstamo.</p>
+
+      <h2>Entidad principal: Book</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>isbn</td><td>ISBN del libro (único)</td></tr>
+        <tr><td>title</td><td>Título del libro</td></tr>
+        <tr><td>author</td><td>Autor del libro</td></tr>
+        <tr><td>available</td><td>Disponibilidad (true/false)</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear libro</h2>
+      <pre>{
+  "isbn": "978-84-376-0494-7",
+  "title": "Cien años de soledad",
+  "author": "Gabriel García Márquez"
+}</pre>
+
+      <h2>Ejemplo - Marcar como prestado</h2>
+      <pre>{
+  "available": false
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>isbn es obligatorio.</li>
+        <li>isbn debe ser único.</li>
+        <li>title es obligatorio.</li>
+        <li>author es obligatorio.</li>
+        <li>available debe comenzar en true (disponible).</li>
+        <li>No se puede prestar un libro que no esté disponible.</li>
+        <li>El libro debe existir para poder prestarlo o devolverlo.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el libro no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando el libro ya esté prestado.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/books</td><td>Crear libro</td></tr>
+        <tr><td>GET</td><td>/books</td><td>Consultar libros</td></tr>
+        <tr><td>GET</td><td>/books/{id}</td><td>Consultar libro por id</td></tr>
+        <tr><td>PUT</td><td>/books/{id}/lend</td><td>Prestar libro</td></tr>
+        <tr><td>PUT</td><td>/books/{id}/return</td><td>Devolver libro</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Book already lent"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 2 -->
+    <section id="ej2" class="exercise">
+      <h1>Ejercicio 2 — API de productos de tienda <span class="badge basico">Básico</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una tienda necesita administrar su catálogo de productos y controlar el stock disponible para la venta. Se requiere desarrollar un microservicio para gestionar productos y ventas.</p>
+
+      <h2>Entidad principal: Product</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>sku</td><td>Código SKU (único)</td></tr>
+        <tr><td>name</td><td>Nombre del producto</td></tr>
+        <tr><td>price</td><td>Precio unitario</td></tr>
+        <tr><td>stock</td><td>Cantidad en stock</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear producto</h2>
+      <pre>{
+  "sku": "PROD-001",
+  "name": "Mouse inalámbrico",
+  "price": 25.99,
+  "stock": 100
+}</pre>
+
+      <h2>Ejemplo - Registrar venta</h2>
+      <pre>{
+  "quantity": 5
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>sku es obligatorio.</li>
+        <li>sku debe ser único.</li>
+        <li>name es obligatorio.</li>
+        <li>price debe ser mayor a cero.</li>
+        <li>stock debe ser mayor o igual a cero.</li>
+        <li>La cantidad a vender debe ser mayor a cero.</li>
+        <li>No se puede vender más cantidad que el stock disponible.</li>
+        <li>El producto debe existir para poder venderlo.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el producto no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando no exista stock suficiente.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/products</td><td>Crear producto</td></tr>
+        <tr><td>GET</td><td>/products</td><td>Consultar productos</td></tr>
+        <tr><td>GET</td><td>/products/{id}</td><td>Consultar producto por id</td></tr>
+        <tr><td>PUT</td><td>/products/{id}/sell</td><td>Registrar venta</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Insufficient stock"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 3 -->
+    <section id="ej3" class="exercise">
+      <h1>Ejercicio 3 — Registro de usuarios <span class="badge basico">Básico</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una plataforma necesita administrar el registro de sus usuarios. Se requiere desarrollar un microservicio para gestionar cuentas de usuario.</p>
+
+      <h2>Entidad principal: User</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>email</td><td>Correo electrónico (único)</td></tr>
+        <tr><td>name</td><td>Nombre del usuario</td></tr>
+        <tr><td>createdAt</td><td>Fecha de creación</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear usuario</h2>
+      <pre>{
+  "email": "juan@email.com",
+  "name": "Juan Perez"
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>email es obligatorio.</li>
+        <li>email debe ser único.</li>
+        <li>name es obligatorio.</li>
+        <li>El usuario no puede duplicarse con el mismo email.</li>
+        <li>createdAt debe asignarse automáticamente al momento de creación.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el usuario no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando el email ya esté registrado.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/users</td><td>Crear usuario</td></tr>
+        <tr><td>GET</td><td>/users</td><td>Consultar usuarios</td></tr>
+        <tr><td>GET</td><td>/users/{id}</td><td>Consultar usuario por id</td></tr>
+        <tr><td>DELETE</td><td>/users/{id}</td><td>Eliminar usuario</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Email already registered"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 4 -->
+    <section id="ej4" class="exercise">
+      <h1>Ejercicio 4 — Gestión de tareas (To-Do) <span class="badge basico">Básico</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Un equipo de trabajo necesita administrar sus tareas pendientes y completadas. Se requiere desarrollar un microservicio para gestionar tareas.</p>
+
+      <h2>Entidad principal: Task</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>title</td><td>Título de la tarea</td></tr>
+        <tr><td>description</td><td>Descripción de la tarea</td></tr>
+        <tr><td>status</td><td>Estado (PENDIENTE / COMPLETADA)</td></tr>
+        <tr><td>priority</td><td>Prioridad (ALTA / MEDIA / BAJA)</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear tarea</h2>
+      <pre>{
+  "title": "Reunión de equipo",
+  "description": "Definir objetivos del sprint",
+  "priority": "ALTA"
+}</pre>
+
+      <h2>Ejemplo - Completar tarea</h2>
+      <pre>{
+  "status": "COMPLETADA"
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>title es obligatorio.</li>
+        <li>status debe comenzar en PENDIENTE.</li>
+        <li>priority es obligatoria y debe ser ALTA, MEDIA o BAJA.</li>
+        <li>Solo se puede completar una tarea que exista.</li>
+        <li>No se puede completar una tarea ya completada.</li>
+        <li>No se puede modificar una tarea eliminada.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando la tarea no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando la tarea ya esté completada.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/tasks</td><td>Crear tarea</td></tr>
+        <tr><td>GET</td><td>/tasks</td><td>Consultar tareas</td></tr>
+        <tr><td>GET</td><td>/tasks/{id}</td><td>Consultar tarea por id</td></tr>
+        <tr><td>PUT</td><td>/tasks/{id}/complete</td><td>Completar tarea</td></tr>
+        <tr><td>DELETE</td><td>/tasks/{id}</td><td>Eliminar tarea</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Task already completed"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 5 -->
+    <section id="ej5" class="exercise">
+      <h1>Ejercicio 5 — Cuentas bancarias <span class="badge intermedio">Intermedio</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Un banco necesita administrar cuentas de sus clientes y permitir operaciones de depósito y retiro. Se requiere desarrollar un microservicio para gestionar cuentas bancarias.</p>
+
+      <h2>Entidad principal: BankAccount</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>accountNumber</td><td>Número de cuenta (único)</td></tr>
+        <tr><td>owner</td><td>Titular de la cuenta</td></tr>
+        <tr><td>balance</td><td>Saldo actual</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear cuenta</h2>
+      <pre>{
+  "accountNumber": "1234567890",
+  "owner": "Maria Lopez"
+}</pre>
+
+      <h2>Ejemplo - Depositar</h2>
+      <pre>{
+  "amount": 500.00
+}</pre>
+
+      <h2>Ejemplo - Retirar</h2>
+      <pre>{
+  "amount": 200.00
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>accountNumber es obligatorio.</li>
+        <li>accountNumber debe ser único.</li>
+        <li>owner es obligatorio.</li>
+        <li>El saldo inicial debe comenzar en cero.</li>
+        <li>El monto a depositar debe ser mayor a cero.</li>
+        <li>El monto a retirar debe ser mayor a cero.</li>
+        <li>No se debe permitir que el saldo sea negativo.</li>
+        <li>La cuenta debe existir para poder depositar o retirar.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando la cuenta no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando el saldo sea insuficiente para el retiro.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/accounts</td><td>Crear cuenta</td></tr>
+        <tr><td>GET</td><td>/accounts</td><td>Consultar cuentas</td></tr>
+        <tr><td>GET</td><td>/accounts/{id}</td><td>Consultar cuenta por id</td></tr>
+        <tr><td>POST</td><td>/accounts/{id}/deposit</td><td>Depositar</td></tr>
+        <tr><td>POST</td><td>/accounts/{id}/withdraw</td><td>Retirar</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Insufficient balance"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 6 -->
+    <section id="ej6" class="exercise">
+      <h1>Ejercicio 6 — Inventario de almacén <span class="badge intermedio">Intermedio</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Un almacén necesita registrar las entradas y salidas de sus productos para controlar el inventario. Se requiere desarrollar un microservicio para gestionar el inventario.</p>
+
+      <h2>Entidad principal: InventoryItem</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>code</td><td>Código del producto (único)</td></tr>
+        <tr><td>name</td><td>Nombre del producto</td></tr>
+        <tr><td>quantity</td><td>Cantidad en stock</td></tr>
+        <tr><td>unit</td><td>Unidad de medida (UNIDAD, CAJA, KG)</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear producto del inventario</h2>
+      <pre>{
+  "code": "INV-001",
+  "name": "Cemento Portland",
+  "quantity": 50,
+  "unit": "BOLSA"
+}</pre>
+
+      <h2>Ejemplo - Registrar entrada</h2>
+      <pre>{
+  "quantity": 30
+}</pre>
+
+      <h2>Ejemplo - Registrar salida</h2>
+      <pre>{
+  "quantity": 20
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>code es obligatorio.</li>
+        <li>code debe ser único.</li>
+        <li>name es obligatorio.</li>
+        <li>quantity inicial debe ser mayor o igual a cero.</li>
+        <li>unit es obligatoria.</li>
+        <li>La cantidad de entrada debe ser mayor a cero.</li>
+        <li>La cantidad de salida debe ser mayor a cero.</li>
+        <li>No se puede registrar una salida mayor al stock disponible.</li>
+        <li>El producto debe existir para registrar entradas o salidas.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el producto no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando la salida supere el stock disponible.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/inventory</td><td>Crear producto</td></tr>
+        <tr><td>GET</td><td>/inventory</td><td>Consultar inventario</td></tr>
+        <tr><td>GET</td><td>/inventory/{id}</td><td>Consultar producto por id</td></tr>
+        <tr><td>POST</td><td>/inventory/{id}/in</td><td>Registrar entrada</td></tr>
+        <tr><td>POST</td><td>/inventory/{id}/out</td><td>Registrar salida</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Insufficient stock for exit"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 7 -->
+    <section id="ej7" class="exercise">
+      <h1>Ejercicio 7 — Sistema de reservas de hotel <span class="badge intermedio">Intermedio</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Un hotel necesita administrar sus habitaciones y permitir a los huéspedes reservarlas por fechas. Se requiere desarrollar un microservicio para gestionar habitaciones y reservas.</p>
+
+      <h2>Entidad principal: Room</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>roomNumber</td><td>Número de habitación (único)</td></tr>
+        <tr><td>type</td><td>Tipo (SIMPLE, DOBLE, SUITE)</td></tr>
+        <tr><td>price</td><td>Precio por noche</td></tr>
+        <tr><td>status</td><td>Estado (DISPONIBLE, OCUPADA)</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear habitación</h2>
+      <pre>{
+  "roomNumber": "101",
+  "type": "DOBLE",
+  "price": 80.00
+}</pre>
+
+      <h2>Ejemplo - Reservar habitación</h2>
+      <pre>{
+  "guestName": "Carlos Garcia",
+  "checkIn": "2026-10-01",
+  "checkOut": "2026-10-05"
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>roomNumber es obligatorio.</li>
+        <li>roomNumber debe ser único.</li>
+        <li>type es obligatoria y debe ser SIMPLE, DOBLE o SUITE.</li>
+        <li>price debe ser mayor a cero.</li>
+        <li>status debe comenzar en DISPONIBLE.</li>
+        <li>guestName es obligatorio para reservar.</li>
+        <li>checkIn y checkOut son obligatorios.</li>
+        <li>checkOut debe ser posterior a checkIn.</li>
+        <li>No se puede reservar una habitación OCUPADA.</li>
+        <li>La habitación debe existir para reservar o liberar.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando la habitación no exista.</li>
+        <li>400 para solicitudes inválidas (fechas incorrectas, campos faltantes).</li>
+        <li>409 cuando la habitación esté ocupada.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/rooms</td><td>Crear habitación</td></tr>
+        <tr><td>GET</td><td>/rooms</td><td>Consultar habitaciones</td></tr>
+        <tr><td>GET</td><td>/rooms/{id}</td><td>Consultar habitación por id</td></tr>
+        <tr><td>POST</td><td>/rooms/{id}/reserve</td><td>Reservar habitación</td></tr>
+        <tr><td>POST</td><td>/rooms/{id}/release</td><td>Liberar habitación</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Room already occupied"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 8 -->
+    <section id="ej8" class="exercise">
+      <h1>Ejercicio 8 — Carrito de compras <span class="badge intermedio">Intermedio</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una tienda en línea necesita administrar carritos de compra donde los clientes pueden agregar y eliminar productos. Se requiere desarrollar un microservicio para gestionar carritos.</p>
+
+      <h2>Entidad principal: CartItem</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>cartId</td><td>Identificador del carrito</td></tr>
+        <tr><td>productId</td><td>Producto asociado</td></tr>
+        <tr><td>quantity</td><td>Cantidad del producto</td></tr>
+        <tr><td>unitPrice</td><td>Precio unitario al momento de agregar</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Agregar producto al carrito</h2>
+      <pre>{
+  "cartId": "CART-001",
+  "productId": 1,
+  "quantity": 2,
+  "unitPrice": 25.99
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>cartId es obligatorio.</li>
+        <li>productId es obligatorio y debe referenciar un producto existente.</li>
+        <li>quantity debe ser mayor a cero.</li>
+        <li>unitPrice debe ser mayor a cero.</li>
+        <li>No se puede agregar el mismo producto dos veces al mismo carrito (se debe actualizar la cantidad).</li>
+        <li>El carrito debe existir para agregar o eliminar productos.</li>
+        <li>El producto debe existir para ser agregado.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el carrito o producto no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando se intente agregar un producto duplicado sin actualizar cantidad.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/carts/{cartId}/items</td><td>Agregar producto al carrito</td></tr>
+        <tr><td>GET</td><td>/carts/{cartId}/items</td><td>Consultar productos del carrito</td></tr>
+        <tr><td>PUT</td><td>/carts/{cartId}/items/{itemId}</td><td>Actualizar cantidad</td></tr>
+        <tr><td>DELETE</td><td>/carts/{cartId}/items/{itemId}</td><td>Eliminar producto del carrito</td></tr>
+        <tr><td>GET</td><td>/carts/{cartId}/total</td><td>Calcular total del carrito</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Product already in cart"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 9 -->
+    <section id="ej9" class="exercise">
+      <h1>Ejercicio 9 — Gestión de cuentas de estacionamiento <span class="badge intermedio">Intermedio</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Un estacionamiento necesita registrar el ingreso y salida de vehículos y calcular la tarifa por hora. Se requiere desarrollar un microservicio para gestionar el estacionamiento.</p>
+
+      <h2>Entidad principal: ParkingTicket</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>plate</td><td>Placa del vehículo</td></tr>
+        <tr><td>spaceNumber</td><td>Número de espacio</td></tr>
+        <tr><td>entryTime</td><td>Hora de ingreso</td></tr>
+        <tr><td>exitTime</td><td>Hora de salida</td></tr>
+        <tr><td>totalFee</td><td>Tarifa total</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Registrar ingreso</h2>
+      <pre>{
+  "plate": "ABC-123",
+  "spaceNumber": "A-15"
+}</pre>
+
+      <h2>Ejemplo - Registrar salida</h2>
+      <pre>{
+  "exitTime": "2026-10-01T18:30:00"
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>plate es obligatorio.</li>
+        <li>plate debe ser único mientras el vehículo esté dentro (ticket activo).</li>
+        <li>spaceNumber es obligatorio.</li>
+        <li>entryTime se asigna automáticamente al ingresar.</li>
+        <li>exitTime es obligatorio al registrar salida.</li>
+        <li>exitTime debe ser posterior a entryTime.</li>
+        <li>La tarifa por hora debe ser mayor a cero.</li>
+        <li>No se puede registrar salida de un vehículo que no haya ingresado.</li>
+        <li>No se puede registrar ingreso de un vehículo que ya esté dentro.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el ticket no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando el vehículo ya esté estacionado o ya haya salido.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/parking/entry</td><td>Registrar ingreso</td></tr>
+        <tr><td>POST</td><td>/parking/{id}/exit</td><td>Registrar salida</td></tr>
+        <tr><td>GET</td><td>/parking</td><td>Consultar tickets activos</td></tr>
+        <tr><td>GET</td><td>/parking/{id}</td><td>Consultar ticket por id</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Vehicle already parked"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 10 -->
+    <section id="ej10" class="exercise">
+      <h1>Ejercicio 10 — API de notas médicas <span class="badge intermedio">Intermedio</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una clínica necesita administrar sus pacientes y las notas médicas asociadas a cada uno. Se requiere desarrollar un microservicio para gestionar pacientes y notas médicas.</p>
+
+      <h2>Entidad principal: MedicalNote (relación N:1 con Patient)</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>patientId</td><td>Paciente asociado</td></tr>
+        <tr><td>date</td><td>Fecha de la nota</td></tr>
+        <tr><td>diagnosis</td><td>Diagnóstico</td></tr>
+        <tr><td>treatment</td><td>Tratamiento indicado</td></tr>
+      </table>
+
+      <h2>Entidad secundaria: Patient</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>dossierNumber</td><td>Número de expediente (único)</td></tr>
+        <tr><td>name</td><td>Nombre del paciente</td></tr>
+        <tr><td>birthDate</td><td>Fecha de nacimiento</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear paciente</h2>
+      <pre>{
+  "dossierNumber": "EXP-001",
+  "name": "Ana Torres",
+  "birthDate": "1990-05-15"
+}</pre>
+
+      <h2>Ejemplo - Crear nota médica</h2>
+      <pre>{
+  "date": "2026-10-01",
+  "diagnosis": "Gripe común",
+  "treatment": "Reposo y líquidos"
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>dossierNumber es obligatorio y único.</li>
+        <li>name es obligatorio para el paciente.</li>
+        <li>birthDate es obligatoria para el paciente.</li>
+        <li>date es obligatoria para la nota.</li>
+        <li>diagnosis es obligatoria.</li>
+        <li>El paciente debe existir para crear notas médicas.</li>
+        <li>Las notas deben estar asociadas a un paciente existente.</li>
+        <li>No se pueden crear notas para pacientes eliminados.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el paciente o la nota no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando el dossierNumber ya esté registrado.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/patients</td><td>Crear paciente</td></tr>
+        <tr><td>GET</td><td>/patients</td><td>Consultar pacientes</td></tr>
+        <tr><td>GET</td><td>/patients/{id}</td><td>Consultar paciente por id</td></tr>
+        <tr><td>POST</td><td>/patients/{id}/notes</td><td>Crear nota médica</td></tr>
+        <tr><td>GET</td><td>/patients/{id}/notes</td><td>Consultar notas del paciente</td></tr>
+        <tr><td>GET</td><td>/notes/{id}</td><td>Consultar nota por id</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Patient not found"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 11 -->
+    <section id="ej11" class="exercise">
+      <h1>Ejercicio 11 — Transferencias entre cuentas <span class="badge avanzado">Avanzado</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Un banco necesita permitir transferencias de dinero entre cuentas de sus clientes de forma segura y atómica. Se requiere desarrollar un microservicio para gestionar cuentas y transferencias.</p>
+
+      <h2>Entidad principal: Account</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>accountNumber</td><td>Número de cuenta (único)</td></tr>
+        <tr><td>owner</td><td>Titular</td></tr>
+        <tr><td>balance</td><td>Saldo actual</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear cuenta</h2>
+      <pre>{
+  "accountNumber": "1111222233",
+  "owner": "Pedro Sanchez"
+}</pre>
+
+      <h2>Ejemplo - Transferir</h2>
+      <pre>{
+  "fromAccountNumber": "1111222233",
+  "toAccountNumber": "4444555566",
+  "amount": 150.00
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>accountNumber es obligatorio y único.</li>
+        <li>owner es obligatorio.</li>
+        <li>El saldo inicial debe comenzar en cero.</li>
+        <li>El monto de la transferencia debe ser mayor a cero.</li>
+        <li>La cuenta origen debe tener saldo suficiente.</li>
+        <li>La cuenta origen y destino deben existir.</li>
+        <li>La cuenta origen no puede ser igual a la cuenta destino.</li>
+        <li>La transferencia debe ser atómica: si falla una parte, no se debe aplicar ningún cambio.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando alguna cuenta no exista.</li>
+        <li>400 para solicitudes inválidas (monto ≤ 0, origen = destino).</li>
+        <li>409 cuando el saldo sea insuficiente.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/accounts</td><td>Crear cuenta</td></tr>
+        <tr><td>GET</td><td>/accounts</td><td>Consultar cuentas</td></tr>
+        <tr><td>GET</td><td>/accounts/{id}</td><td>Consultar cuenta por id</td></tr>
+        <tr><td>POST</td><td>/transfers</td><td>Realizar transferencia</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Insufficient balance for transfer"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+        <li>Atomicidad en la transferencia.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 12 -->
+    <section id="ej12" class="exercise">
+      <h1>Ejercicio 12 — Sistema de cupones de descuento <span class="badge avanzado">Avanzado</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una tienda necesita crear cupones de descuento y aplicarlos a las compras de sus clientes. Se requiere desarrollar un microservicio para gestionar cupones.</p>
+
+      <h2>Entidad principal: Coupon</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>code</td><td>Código del cupón (único)</td></tr>
+        <tr><td>discountPercent</td><td>Porcentaje de descuento</td></tr>
+        <tr><td>active</td><td>Activo (true/false)</td></tr>
+        <tr><td>used</td><td>Usado (true/false)</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear cupón</h2>
+      <pre>{
+  "code": "DESCUENTO20",
+  "discountPercent": 20
+}</pre>
+
+      <h2>Ejemplo - Aplicar cupón</h2>
+      <pre>{
+  "code": "DESCUENTO20",
+  "purchaseAmount": 100.00
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>code es obligatorio.</li>
+        <li>code debe ser único.</li>
+        <li>discountPercent debe estar entre 1 y 100.</li>
+        <li>active debe comenzar en true.</li>
+        <li>used debe comenzar en false.</li>
+        <li>No se puede aplicar un cupón ya usado.</li>
+        <li>No se puede aplicar un cupón inactivo.</li>
+        <li>El cupón debe existir para ser aplicado.</li>
+        <li>purchaseAmount debe ser mayor a cero.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el cupón no exista.</li>
+        <li>400 para solicitudes inválidas (porcentaje fuera de rango, monto ≤ 0).</li>
+        <li>409 cuando el cupón ya haya sido usado o esté inactivo.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/coupons</td><td>Crear cupón</td></tr>
+        <tr><td>GET</td><td>/coupons</td><td>Consultar cupones</td></tr>
+        <tr><td>GET</td><td>/coupons/{id}</td><td>Consultar cupón por id</td></tr>
+        <tr><td>POST</td><td>/coupons/apply</td><td>Aplicar cupón a una compra</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Coupon already used"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 13 -->
+    <section id="ej13" class="exercise">
+      <h1>Ejercicio 13 — Biblioteca con préstamos <span class="badge avanzado">Avanzado</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una biblioteca necesita gestionar sus libros con múltiples ejemplares y permitir préstamos a sus usuarios. Se requiere desarrollar un microservicio para administrar libros, usuarios y préstamos.</p>
+
+      <h2>Entidad principal: Loan (relación N:1 con Book y User)</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>bookId</td><td>Libro prestado</td></tr>
+        <tr><td>userId</td><td>Usuario que retira</td></tr>
+        <tr><td>loanDate</td><td>Fecha de préstamo</td></tr>
+        <tr><td>returnDate</td><td>Fecha de devolución</td></tr>
+        <tr><td>status</td><td>Estado (ACTIVO, DEVUELTO)</td></tr>
+      </table>
+
+      <h2>Entidad secundaria: Book</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>isbn</td><td>ISBN (único)</td></tr>
+        <tr><td>title</td><td>Título</td></tr>
+        <tr><td>author</td><td>Autor</td></tr>
+        <tr><td>copies</td><td>Ejemplares disponibles</td></tr>
+      </table>
+
+      <h2>Entidad secundaria: User</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>email</td><td>Email (único)</td></tr>
+        <tr><td>name</td><td>Nombre</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear libro</h2>
+      <pre>{
+  "isbn": "978-84-204-1234-5",
+  "title": "El Quijote",
+  "author": "Miguel de Cervantes",
+  "copies": 3
+}</pre>
+
+      <h2>Ejemplo - Registrar préstamo</h2>
+      <pre>{
+  "bookId": 1,
+  "userId": 1
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>isbn es obligatorio y único.</li>
+        <li>title y author son obligatorios.</li>
+        <li>copies inicial debe ser mayor o igual a cero.</li>
+        <li>El libro debe tener al menos un ejemplar disponible para prestar.</li>
+        <li>El usuario y el libro deben existir para registrar un préstamo.</li>
+        <li>loanDate se asigna automáticamente.</li>
+        <li>status comienza en ACTIVO.</li>
+        <li>Al devolver, copies debe incrementarse en 1.</li>
+        <li>No se puede prestar un libro sin ejemplares disponibles.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el libro o usuario no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando no hayan ejemplares disponibles.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/books</td><td>Crear libro</td></tr>
+        <tr><td>GET</td><td>/books</td><td>Consultar libros</td></tr>
+        <tr><td>POST</td><td>/users</td><td>Crear usuario</td></tr>
+        <tr><td>GET</td><td>/users</td><td>Consultar usuarios</td></tr>
+        <tr><td>POST</td><td>/loans</td><td>Registrar préstamo</td></tr>
+        <tr><td>POST</td><td>/loans/{id}/return</td><td>Devolver libro</td></tr>
+        <tr><td>GET</td><td>/loans</td><td>Consultar préstamos</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "No copies available"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 14 -->
+    <section id="ej14" class="exercise">
+      <h1>Ejercicio 14 — Gestión de eventos con aforo limitado <span class="badge avanzado">Avanzado</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una organización necesita crear eventos con un cupo limitado de asistentes y permitir la inscripción de participantes. Se requiere desarrollar un microservicio para gestionar eventos e inscripciones.</p>
+
+      <h2>Entidad principal: Event</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>name</td><td>Nombre del evento</td></tr>
+        <tr><td>date</td><td>Fecha del evento</td></tr>
+        <tr><td>capacity</td><td>Cupo máximo</td></tr>
+        <tr><td>enrolled</td><td>Inscritos actuales</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear evento</h2>
+      <pre>{
+  "name": "Conferencia de Java",
+  "date": "2026-11-15",
+  "capacity": 50
+}</pre>
+
+      <h2>Ejemplo - Inscribirse al evento</h2>
+      <pre>{
+  "participantEmail": "ana@email.com",
+  "participantName": "Ana Ruiz"
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>name es obligatorio.</li>
+        <li>date es obligatoria.</li>
+        <li>capacity debe ser mayor a cero.</li>
+        <li>enrolled debe comenzar en cero.</li>
+        <li>participantEmail y participantName son obligatorios para inscribirse.</li>
+        <li>No se puede exceder el cupo máximo (enrolled &lt; capacity).</li>
+        <li>No se puede inscribir el mismo email dos veces al mismo evento.</li>
+        <li>El evento debe existir para inscribirse o cancelar inscripción.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando el evento no exista.</li>
+        <li>400 para solicitudes inválidas.</li>
+        <li>409 cuando el cupo esté lleno o el participante ya esté inscrito.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/events</td><td>Crear evento</td></tr>
+        <tr><td>GET</td><td>/events</td><td>Consultar eventos</td></tr>
+        <tr><td>GET</td><td>/events/{id}</td><td>Consultar evento por id</td></tr>
+        <tr><td>POST</td><td>/events/{id}/enroll</td><td>Inscribirse al evento</td></tr>
+        <tr><td>DELETE</td><td>/events/{id}/enroll/{email}</td><td>Cancelar inscripción</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Event capacity reached"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+    <!-- EJERCICIO 15 -->
+    <section id="ej15" class="exercise">
+      <h1>Ejercicio 15 — Wallet digital con historial <span class="badge avanzado">Avanzado</span></h1>
+
+      <h2>Caso de negocio</h2>
+      <p>Una fintech necesita administrar billeteras digitales donde los usuarios pueden recargar dinero, realizar pagos y consultar su historial de transacciones. Se requiere desarrollar un microservicio para gestionar wallets y transacciones.</p>
+
+      <h2>Entidad principal: Wallet</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>userId</td><td>Usuario propietario (único)</td></tr>
+        <tr><td>balance</td><td>Saldo actual</td></tr>
+        <tr><td>currency</td><td>Moneda (USD, EUR, MXN)</td></tr>
+      </table>
+
+      <h2>Entidad secundaria: Transaction</h2>
+      <table>
+        <tr><th>Campo</th><th>Descripción</th></tr>
+        <tr><td>id</td><td>Identificador único</td></tr>
+        <tr><td>walletId</td><td>Wallet asociada</td></tr>
+        <tr><td>type</td><td>Tipo (RECHARGE, PAYMENT)</td></tr>
+        <tr><td>amount</td><td>Monto</td></tr>
+        <tr><td>date</td><td>Fecha de la transacción</td></tr>
+      </table>
+
+      <h2>Arquitectura esperada</h2>
+      <ol><li>controller</li><li>service</li><li>repository</li><li>entity</li></ol>
+
+      <h2>Ejemplo - Crear wallet</h2>
+      <pre>{
+  "userId": "USER-001",
+  "currency": "USD"
+}</pre>
+
+      <h2>Ejemplo - Recargar</h2>
+      <pre>{
+  "amount": 100.00
+}</pre>
+
+      <h2>Ejemplo - Pagar</h2>
+      <pre>{
+  "amount": 30.00,
+  "description": "Pago de servicio"
+}</pre>
+
+      <h2>Reglas de negocio</h2>
+      <ol>
+        <li>userId es obligatorio y único (una wallet por usuario).</li>
+        <li>currency es obligatoria y debe ser USD, EUR o MXN.</li>
+        <li>balance inicial debe comenzar en cero.</li>
+        <li>El monto de recarga debe ser mayor a cero.</li>
+        <li>El monto de pago debe ser mayor a cero.</li>
+        <li>No se puede pagar más que el saldo disponible.</li>
+        <li>Cada operación debe generar una transacción en el historial.</li>
+        <li>La wallet debe existir para recargar, pagar o consultar historial.</li>
+      </ol>
+
+      <h2>Manejo de errores</h2>
+      <ol>
+        <li>404 cuando la wallet no exista.</li>
+        <li>400 para solicitudes inválidas (monto ≤ 0, moneda inválida).</li>
+        <li>409 cuando el saldo sea insuficiente para el pago.</li>
+      </ol>
+
+      <h2>Endpoints requeridos</h2>
+      <table>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+        <tr><td>POST</td><td>/wallets</td><td>Crear wallet</td></tr>
+        <tr><td>GET</td><td>/wallets/{id}</td><td>Consultar wallet</td></tr>
+        <tr><td>GET</td><td>/wallets</td><td>Consultar wallets</td></tr>
+        <tr><td>POST</td><td>/wallets/{id}/recharge</td><td>Recargar</td></tr>
+        <tr><td>POST</td><td>/wallets/{id}/pay</td><td>Pagar</td></tr>
+        <tr><td>GET</td><td>/wallets/{id}/transactions</td><td>Historial de transacciones</td></tr>
+      </table>
+
+      <h2>Ejemplo de respuesta de error</h2>
+      <pre>{
+  "message": "Insufficient balance"
+}</pre>
+
+      <h2>Criterios de evaluación</h2>
+      <ol>
+        <li>El proyecto compila y ejecuta correctamente.</li>
+        <li>Persistencia funcional utilizando H2.</li>
+        <li>Correcta separación de responsabilidades por capas.</li>
+        <li>Uso adecuado de Spring Boot y JPA.</li>
+        <li>Diseño REST.</li>
+        <li>Validaciones y manejo de errores.</li>
+        <li>Legibilidad y calidad del código.</li>
+      </ol>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.exercise').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (el) {
+    el.classList.add('active');
+  } else {
+    const nav = document.querySelector('.nav-item[data-target="' + id + '"]');
+    if (nav) nav.classList.add('active');
+  }
+  document.querySelector('.main').scrollTop = 0;
+}
+</script>
+</body>
+</html>

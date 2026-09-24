@@ -1,0 +1,58 @@
+<templateSet group="Interview - CRUD Spring boot">
+  <template name="repo-findby" value="// Ejemplo: Optional&lt;Entity&gt; findByEmail(String campo);&#10;Optional&lt;Entity&gt; findBy$INPUT$(String campo);" description="Filtrar - buscar elemento por Campo" toReformat="false" toShortenFQNames="true">
+    <variable name="INPUT" expression="" defaultValue="&quot;Campo&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="repo-existe-item" value="// Ejemplo: boolean existsByEmail(String email);&#10;boolean existsBy$INPUT$(String campo);" description="Existe elemento de cierto campo?" toReformat="false" toShortenFQNames="true">
+    <variable name="INPUT" expression="" defaultValue="&quot;CAMPO&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="repo-find-2params" value="//Ejemplo: Optional&lt;ENTITY&gt; findByEmailAndName(String email, String name);&#10;Optional&lt;ENTITY&gt; findBy$FIELD1$And$FIELD2$($TYPE1$ $PARAM1$, $TYPE2$ $PARAM2$);" description="Filtrar elemento por dos campos" toReformat="false" toShortenFQNames="true">
+    <variable name="FIELD1" expression="" defaultValue="&quot;Campo1&quot;" alwaysStopAt="true" />
+    <variable name="FIELD2" expression="" defaultValue="&quot;Campo1&quot;" alwaysStopAt="true" />
+    <variable name="TYPE1" expression="" defaultValue="&quot;TipoDeDato&quot;" alwaysStopAt="true" />
+    <variable name="PARAM1" expression="" defaultValue="&quot;campo1&quot;" alwaysStopAt="true" />
+    <variable name="TYPE2" expression="" defaultValue="&quot;TipoDeDato&quot;" alwaysStopAt="true" />
+    <variable name="PARAM2" expression="" defaultValue="&quot;campo2&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="entity-details" value="// ==================== TEXT ====================&#10;&#10;// String&#10;@Column(nullable = false, length = 100)&#10;private String name;&#10;&#10;// String largo&#10;@Column(columnDefinition = &quot;TEXT&quot;)&#10;private String description;&#10;&#10;&#10;// ==================== NUMBERS ====================&#10;&#10;// Integer&#10;private Integer quantity;&#10;// Long&#10;private Long externalId;&#10;&#10;// Decimal / dinero&#10;@Column(precision = 19, scale = 2)&#10;private BigDecimal amount;&#10;&#10;// ==================== BOOLEAN ====================&#10;&#10;// Boolean&#10;@Column(nullable = false)&#10;private Boolean active;&#10;&#10;// ==================== ENUM ====================&#10;&#10;@Enumerated(EnumType.STRING)&#10;@Column(nullable = false, length = 30)&#10;private Status status;&#10;&#10;// ==================== DATE / TIME ====================&#10;&#10;// Fecha y hora&#10;private LocalDateTime dateTime;&#10;&#10;// Solo fecha&#10;private LocalDate date;&#10;&#10;// Solo hora&#10;private LocalTime time;&#10;&#10;// ==================== UUID ====================&#10;&#10;// UUID&#10;@Column(nullable = false, unique = true)&#10;private UUID uuid;&#10;&#10;// ==================== AUDIT ====================&#10;&#10;// Fecha de creación&#10;@CreationTimestamp&#10;@Column(nullable = false, updatable = false)&#10;private LocalDateTime createdAt;&#10;&#10;// Fecha de actualización&#10;@UpdateTimestamp&#10;@Column(nullable = false)&#10;private LocalDateTime updatedAt;&#10;&#10;// ==================== RELATIONSHIPS ====================&#10;&#10;// ManyToOne&#10;@ManyToOne(fetch = FetchType.LAZY, optional = false)&#10;@JoinColumn(name = &quot;...&quot;)&#10;private SomeEntity someEntity;&#10;&#10;// OneToMany&#10;@OneToMany(&#10;  mappedBy = &quot;...&quot;,&#10;  cascade = CascadeType.ALL,&#10;  orphanRemoval = true&#10;)&#10;private List&lt;SomeEntity&gt; items = new ArrayList&lt;&gt;();   " description="Generar  tipos de datos y relaciones en Entidad JPA" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="h2-properties" value="spring.datasource.url=jdbc:h2:mem:testdb&#10;spring.datasource.driver-class-name=org.h2.Driver&#10;spring.datasource.username=admin&#10;spring.datasource.password=&#10;spring.jpa.database-platform=org.hibernate.dialect.H2Dialect&#10;spring.jpa.hibernate.ddl-auto=update&#10;spring.h2.console.enabled=true" description="Configuración H2 en properties" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="Properties" value="true" />
+    </context>
+  </template>
+  <template name="h2-yaml" value="spring:&#10;  datasource:&#10;    url: jdbc:h2:mem:testdb&#10;    driver-class-name: org.h2.Driver&#10;    username: admin&#10;    password:&#10;  jpa:&#10;    database-platform: org.hibernate.dialect.H2Dialect&#10;    hibernate:&#10;      ddl-auto: update&#10;  h2:&#10;    console:&#10;      enabled: true" description="Configuración H2 en yaml" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="GROOVY" value="false" />
+      <option name="HTML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JSON" value="false" />
+      <option name="KOTLIN" value="false" />
+      <option name="MAVEN" value="false" />
+      <option name="OTHER" value="true" />
+      <option name="SHELL_SCRIPT" value="false" />
+      <option name="XML" value="false" />
+    </context>
+  </template>
+  <template name="repo-details-queryMethods" value="// WHERE&#10;// Busca por un campo.&#10;Optional&lt;UserEntity&gt; findByEmail(String email);&#10;&#10;// EXISTS&#10;// Verifica si existe al menos un registro.&#10;boolean existsByEmail(String email);&#10;&#10;// AND&#10;// Filtra por múltiples campos.&#10;List&lt;UserEntity&gt; findByNameAndActive(&#10;        String name,&#10;        boolean active);&#10;&#10;// OR&#10;// Busca cuando se cumple una condición u otra.&#10;Optional&lt;UserEntity&gt; findByEmailOrUsername(&#10;        String email,&#10;        String username);&#10;&#10;// CONTAINING&#10;// Busca coincidencias parciales.&#10;List&lt;UserEntity&gt; findByNameContaining(String name);&#10;&#10;// IGNORE CASE&#10;// Busca sin distinguir mayúsculas/minúsculas.&#10;List&lt;UserEntity&gt; findByNameContainingIgnoreCase(String name);&#10;&#10;// TRUE / FALSE&#10;// Filtra campos booleanos.&#10;List&lt;UserEntity&gt; findByActiveTrue();&#10;&#10;// IN&#10;// Busca valores dentro de una lista.&#10;List&lt;UserEntity&gt; findByStatusIn(&#10;        List&lt;UserStatus&gt; statuses);&#10;&#10;// BETWEEN&#10;// Busca valores dentro de un rango.&#10;List&lt;UserEntity&gt; findByCreatedAtBetween(&#10;        LocalDateTime start,&#10;        LocalDateTime end);&#10;&#10;// COUNT&#10;// Cuenta registros que cumplen una condición.&#10;long countByStatus(UserStatus status);&#10;&#10;&#10;// ORDER BY&#10;// Filtra y ordena resultados.&#10;List&lt;UserEntity&gt; findByActiveTrueOrderByCreatedAtDesc();&#10;&#10;&#10;// TOP&#10;// Limita la cantidad de resultados.&#10;List&lt;UserEntity&gt; findTop10ByActiveTrueOrderByCreatedAtDesc();&#10;&#10;$END$" description="Genera consultas reutilizables con Query Methods" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="repo-details-JPQL" value="//Úsado para consultas personalizadas o complejas.&#10;&#10;// WHERE&#10;// Filtra por una condición.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT u&#10;    FROM UserEntity u&#10;    WHERE u.email = :email&#10;    &quot;&quot;&quot;)&#10;Optional&lt;UserEntity&gt; findByEmail(&#10;        @Param(&quot;email&quot;) String email);&#10;&#10;// AND&#10;// Combina múltiples condiciones.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT u&#10;    FROM UserEntity u&#10;    WHERE u.active = true&#10;    AND u.name = :name&#10;    &quot;&quot;&quot;)&#10;List&lt;UserEntity&gt; findActiveByName(&#10;        @Param(&quot;name&quot;) String name);&#10;&#10;// LIKE&#10;// Busca coincidencias parciales.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT u&#10;    FROM UserEntity u&#10;    WHERE LOWER(u.name)&#10;    LIKE LOWER(CONCAT('%', :name, '%'))&#10;    &quot;&quot;&quot;)&#10;List&lt;UserEntity&gt; searchByName(&#10;        @Param(&quot;name&quot;) String name);&#10;&#10;// BETWEEN&#10;// Filtra un rango de valores.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT a&#10;    FROM AppointmentEntity a&#10;    WHERE a.date BETWEEN :start AND :end&#10;    &quot;&quot;&quot;)&#10;List&lt;AppointmentEntity&gt; findBetween(&#10;        @Param(&quot;start&quot;) LocalDateTime start,&#10;        @Param(&quot;end&quot;) LocalDateTime end);&#10;&#10;// IN&#10;// Filtra valores dentro de una lista.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT u&#10;    FROM UserEntity u&#10;    WHERE u.status IN :statuses&#10;    &quot;&quot;&quot;)&#10;List&lt;UserEntity&gt; findByStatuses(&#10;        @Param(&quot;statuses&quot;) List&lt;UserStatus&gt; statuses);&#10;&#10;// JOIN&#10;// Relaciona entidades.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT a&#10;    FROM AppointmentEntity a&#10;    JOIN a.doctor d&#10;    WHERE d.id = :doctorId&#10;    &quot;&quot;&quot;)&#10;List&lt;AppointmentEntity&gt; findByDoctor(&#10;        @Param(&quot;doctorId&quot;) Long doctorId);&#10;&#10;// JOIN FETCH&#10;// Carga la relación en la misma consulta.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT a&#10;    FROM AppointmentEntity a&#10;    JOIN FETCH a.doctor&#10;    WHERE a.id = :id&#10;    &quot;&quot;&quot;)&#10;Optional&lt;AppointmentEntity&gt; findByIdWithDoctor(&#10;        @Param(&quot;id&quot;) Long id);&#10;&#10;// COUNT&#10;// Cuenta registros.&#10;@Query(&quot;&quot;&quot;&#10;    SELECT COUNT(u)&#10;    FROM UserEntity u&#10;    WHERE u.active = true&#10;    &quot;&quot;&quot;)&#10;long countActive();&#10;&#10;// UPDATE&#10;// Actualiza registros directamente.&#10;@Modifying&#10;@Query(&quot;&quot;&quot;&#10;    UPDATE UserEntity u&#10;    SET u.active = false&#10;    WHERE u.id = :id&#10;    &quot;&quot;&quot;)&#10;int deactivate(@Param(&quot;id&quot;) Long id);&#10;&#10;// DELETE&#10;// Elimina registros directamente.&#10;@Modifying&#10;@Query(&quot;&quot;&quot;&#10;    DELETE FROM UserEntity u&#10;    WHERE u.id = :id&#10;    &quot;&quot;&quot;)&#10;int deleteByUserId(@Param(&quot;id&quot;) Long id);&#10;&#10;$END$" description="genera consultas con JPQL" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>

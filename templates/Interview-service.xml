@@ -1,0 +1,76 @@
+<templateSet group="Interview-service">
+  <template name="isvc-crud" value="$TypeDto$DtoResponse findById(Long id);&#10;&#10;List&lt;$TypeDto$DtoResponse&gt; findAll();&#10;&#10;$TypeDto$DtoResponse save(DtoRequest request);&#10;&#10;$TypeDto$DtoResponse update(DtoRequest request, Long id);&#10;&#10;void delete(Long id);&#10;" description="Metodos Crud de Interface Service" toReformat="false" toShortenFQNames="true">
+    <variable name="TypeDto" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="isvc-findall" value="List&lt;$TypeDto$DtoResponse&gt; findAll();" description="Metodo para recuperar todos los elementos" toReformat="false" toShortenFQNames="true">
+    <variable name="TypeDto" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="isvc-findbyid" value="$TypeDto$DtoResponse findById(Long id);" description="Metodo para buscar elemento por id" toReformat="false" toShortenFQNames="true">
+    <variable name="TypeDto" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="isvc-save" value="$TypeDto$DtoResponse save(DtoRequest request);" description="Metodo para crear un elemento" toReformat="false" toShortenFQNames="true">
+    <variable name="TypeDto" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="isvc-update" value="$TypeDto$DtoResponse update(DtoRequest request, Long id);&#10;" description="Metodo para actualizar un elemento" toReformat="false" toShortenFQNames="true">
+    <variable name="TypeDto" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="isvc-delete" value="void delete(Long id);" description="Metodo para eliminar un elemento" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="svc-create" value="@Transactional&#10;@Override&#10;public DtoResponse save(DtoRequest request) {&#10;  Entity entity = new Entity();&#10;  &#10;  // setear campos&#10;  entity.setName(request.name());&#10;&#10;  return toResponse(repository.save(entity));&#10;}" description="SvcImpl - Crea metodo crear" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="svc-findById" value="@Override&#10;public $TYPE$DtoResponse findById(Long id) {&#10;  Entity entity = repository.findById(id)&#10;      .orElseThrow(() -&gt;&#10;        new ResourceNotFoundException(&quot;Elemento no encontrado: &quot; + id));&#10;&#10;  return new $TYPE$DtoResponse(&#10;    entity.getId()&#10;  );&#10;}" description="SvcImpl - Crea metodo buscar elemento por id" toReformat="false" toShortenFQNames="true">
+    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="svc-mapper" value="private $TYPEDto$Response toResponse($TYPE$Entity entity) {&#10;    return new $TYPEDto$Response(&#10;            entity.getId(),&#10;            entity.getName(),&#10;            entity.getEmail()&#10;    );&#10;}" description="SvcImpl - Genera metodo mapper Entity a Response" toReformat="false" toShortenFQNames="true">
+    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="TYPEDto" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="svc-update" value="@Transactional&#10;public DtoResponse update(Long id, DtoRequest request) {&#10;  Entity entity = repository.findById(id)&#10;    .orElseThrow(() -&gt;&#10;      new ResourceNotFoundException(&quot;Elemento no encontrado: &quot; + id));&#10;  &#10;  // actualizar campos&#10;  entity.setName(request.name());&#10;&#10;  return toResponse(repository.save(entity));&#10;}" description="SvcImpl - Crea metodo actualizar" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="svc-delete" value="@Transactional&#10;@Override&#10;public void delete(Long id) {&#10;  $TYPE$Entity entity = repository.findById(id)&#10;    .orElseThrow(() -&gt;&#10;      new ResourceNotFoundException(&quot;Elemento no encontrado: &quot; + id));&#10;  &#10;  repository.delete(entity);&#10;}" description="SvcImpl - Crea metodo eliminar" toReformat="false" toShortenFQNames="true">
+    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="svc-fc-getbyid" value="private Entity getById(Long id) {&#10;  return repository.findById(id)&#10;    .orElseThrow(() -&gt;&#10;      new ResourceNotFoundException(&quot;Elemento no encontrado: &quot; + id));&#10;}" description="Crear funcion - Busca un elemento por id" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="svc-findall" value="@Override&#10;public List&lt;DtoResponse&gt; findAll() {&#10;  return repository.findAll()&#10;    .stream()&#10;    .map(item -&gt; toResponse(item))&#10;    .toList();&#10;}&#10;&#10;private DtoResponse toResponse(Entity entity) {&#10;  return new DtoResponse(&#10;    entity.getId()&#10;  );&#10;}" description="SvcImpl - Crea método recuperar los elementos." toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>
